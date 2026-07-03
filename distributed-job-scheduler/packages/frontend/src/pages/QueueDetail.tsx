@@ -17,13 +17,16 @@ export default function QueueDetail() {
   const [jobDelay, setJobDelay] = useState(0);
   const [jobPriority, setJobPriority] = useState(5);
   const [jobPayload, setJobPayload] = useState('{\n  "to": "user@example.com",\n  "subject": "Hello World"\n}');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const socket = useWebSocket();
 
   const fetchData = async () => {
     try {
+      const statusParam = statusFilter ? `&status=${statusFilter}` : '';
       const [qRes, jRes, mRes] = await Promise.all([
         api.get(`/queues/${queueId}`),
-        api.get(`/queues/${queueId}/jobs?limit=10`),
+        api.get(`/queues/${queueId}/jobs?limit=10&page=${currentPage}${statusParam}`),
         api.get(`/queues/${queueId}/metrics?hours=1`),
       ]);
       setQueue(qRes.data.data);
@@ -44,7 +47,7 @@ export default function QueueDetail() {
 
   useEffect(() => {
     fetchData();
-  }, [queueId]);
+  }, [queueId, statusFilter, currentPage]);
 
   useEffect(() => {
     if (!socket || !queueId) return;
@@ -52,9 +55,8 @@ export default function QueueDetail() {
     socket.emit('subscribe:queue', queueId);
 
     const handleJobChange = () => {
-      // Very naive approach: just refetch the top jobs when someone changes
-      // In a real app we'd mutate the state
-      api.get(`/queues/${queueId}/jobs?limit=10`).then(res => setJobs(res.data.data));
+      const statusParam = statusFilter ? `&status=${statusFilter}` : '';
+      api.get(`/queues/${queueId}/jobs?limit=10&page=${currentPage}${statusParam}`).then(res => setJobs(res.data.data));
       api.get(`/queues/${queueId}`).then(res => setQueue(res.data.data));
     };
 
@@ -176,7 +178,30 @@ export default function QueueDetail() {
       )}
 
       <div className="glass-panel" style={{ padding: 0 }}>
-        <h3 style={{ padding: '1.5rem', borderBottom: '1px solid var(--panel-border)', margin: 0 }}>Recent Jobs</h3>
+        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--panel-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ margin: 0 }}>Recent Jobs</h3>
+          <div>
+            <select
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="glass-panel"
+              style={{ padding: '0.4rem 0.8rem', color: '#fff', border: '1px solid var(--panel-border)', background: '#111827', outline: 'none', borderRadius: '4px' }}
+            >
+              <option value="" style={{ background: '#111827' }}>All Statuses</option>
+              <option value="pending" style={{ background: '#111827' }}>Pending</option>
+              <option value="scheduled" style={{ background: '#111827' }}>Scheduled</option>
+              <option value="claimed" style={{ background: '#111827' }}>Claimed</option>
+              <option value="running" style={{ background: '#111827' }}>Running</option>
+              <option value="completed" style={{ background: '#111827' }}>Completed</option>
+              <option value="failed" style={{ background: '#111827' }}>Failed</option>
+              <option value="dead" style={{ background: '#111827' }}>Dead (DLQ)</option>
+              <option value="cancelled" style={{ background: '#111827' }}>Cancelled</option>
+            </select>
+          </div>
+        </div>
         <table>
           <thead>
             <tr>
@@ -208,6 +233,27 @@ export default function QueueDetail() {
             )}
           </tbody>
         </table>
+        <div style={{ padding: '1rem', borderTop: '1px solid var(--panel-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Page {currentPage}</span>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="btn btn-secondary"
+              style={{ padding: '0.4rem 0.8rem', fontSize: '0.875rem' }}
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setCurrentPage(prev => prev + 1)}
+              disabled={jobs.length < 10}
+              className="btn btn-secondary"
+              style={{ padding: '0.4rem 0.8rem', fontSize: '0.875rem' }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
 
       {isTriggerModalOpen && (
