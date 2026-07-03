@@ -131,7 +131,7 @@ async function bootstrap(): Promise<void> {
   app.get('/api/docs.json', (_req, res) => res.json(swaggerSpec));
 
   // ─── Routes ───────────────────────────────────────────────
-  app.use('/api/v1', authRouter);
+  app.use('/api/v1/auth', authRouter);
   app.use('/api/v1', projectsRouter);
   app.use('/api/v1', queuesRouter);
   app.use('/api/v1', jobsRouter);

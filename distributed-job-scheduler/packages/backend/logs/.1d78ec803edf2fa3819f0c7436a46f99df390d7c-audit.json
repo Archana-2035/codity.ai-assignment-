@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\archa\\OneDrive\\Documents\\codity.ai\\distributed-job-scheduler\\packages\\backend\\logs\\.1d78ec803edf2fa3819f0c7436a46f99df390d7c-audit.json",
+    "files": [
+        {
+            "date": 1783094068248,
+            "name": "C:\\Users\\archa\\OneDrive\\Documents\\codity.ai\\distributed-job-scheduler\\packages\\backend\\logs\\combined-2026-07-03.log",
+            "hash": "a9a8f98ac7331af4ee7f8e327576b868430e1e7cd2cebb0cbaa293e596be86cd"
+        }
+    ],
+    "hashType": "sha256"
+}
