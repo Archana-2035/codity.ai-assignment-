@@ -1,9 +1,9 @@
 import os from 'os';
 import { v4 as uuidv4 } from 'uuid';
 import { JobContext, LogLevel, WorkerStatus } from '@djs/shared';
-import { logger } from './logger';
-import * as api from './api.client';
-import { getHandler } from './handlers';
+import { logger } from '../logger';
+import * as api from '../api.client';
+import { getHandler } from '../handlers';
 
 interface WorkerConfig {
   queueIds: string[];

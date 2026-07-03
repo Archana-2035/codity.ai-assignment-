@@ -1,6 +1,6 @@
+/// <reference types="vite/client" />
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { WsEvent } from '@djs/shared';
 
 export function useWebSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);

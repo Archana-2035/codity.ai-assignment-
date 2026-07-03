@@ -114,7 +114,7 @@ export async function getQueue(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const stats = await getQueueStatsData(queueId);
+  const stats = await getQueueStatsData(queueId as string);
   res.json({ success: true, data: { ...queue, stats } } as ApiResponse);
 }
 
@@ -186,7 +186,7 @@ export async function deleteQueue(req: Request, res: Response): Promise<void> {
 
 export async function getQueueStats(req: Request, res: Response): Promise<void> {
   const { queueId } = req.params;
-  const stats = await getQueueStatsData(queueId);
+  const stats = await getQueueStatsData(queueId as string);
   res.json({ success: true, data: stats } as ApiResponse);
 }
 

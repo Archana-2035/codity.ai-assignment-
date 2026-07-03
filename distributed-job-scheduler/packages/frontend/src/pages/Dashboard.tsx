@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { api } from '../store/authStore';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);

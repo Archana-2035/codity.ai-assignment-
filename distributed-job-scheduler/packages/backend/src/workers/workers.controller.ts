@@ -355,7 +355,7 @@ export async function failJob(req: Request, res: Response): Promise<void> {
           strategy: 'exponential', initialDelayMs: 1000,
           maxDelayMs: 300000, multiplier: 2.0, jitter: true
         };
-        const { calculateNextRunAt } = await import('./retry.service');
+        const { calculateNextRunAt } = await import('../jobs/retry.service');
         nextRunAt = calculateNextRunAt(policy, job.attempt_count);
       } else {
         nextStatus = queue?.dlq_enabled ? 'dead' : 'failed';

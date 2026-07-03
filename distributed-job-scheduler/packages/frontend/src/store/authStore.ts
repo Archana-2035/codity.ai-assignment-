@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: '/api/v1',
   headers: { 'Content-Type': 'application/json' },
 });
@@ -103,4 +103,3 @@ export const useAuthStore = create<AuthState>((set) => ({
   setActiveProject: (project) => set({ activeProject: project }),
 }));
 
-export { api };

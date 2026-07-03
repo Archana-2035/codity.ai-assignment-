@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../store/authStore';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { WsEvent } from '@djs/shared';
 import toast from 'react-hot-toast';
 

@@ -33,7 +33,7 @@ export async function createJob(req: Request, res: Response): Promise<void> {
 
     // Rate limiting check
     if (queue.rate_limit_per_minute) {
-      const { allowed, remaining, resetAt } = await checkRateLimit(queueId, queue.rate_limit_per_minute);
+      const { allowed, remaining, resetAt } = await checkRateLimit(queueId as string, queue.rate_limit_per_minute);
       if (!allowed) {
         res.status(429).json({
           success: false,
