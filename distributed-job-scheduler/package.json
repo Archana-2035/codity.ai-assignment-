@@ -1,0 +1,22 @@
+{
+  "name": "distributed-job-scheduler",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-grade distributed job scheduling platform",
+  "workspaces": [
+    "packages/shared",
+    "packages/backend",
+    "packages/worker",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w packages/backend\" \"npm run dev -w packages/worker\" \"npm run dev -w packages/frontend\"",
+    "build": "npm run build -w packages/shared && npm run build -w packages/backend && npm run build -w packages/worker && npm run build -w packages/frontend",
+    "test": "npm run test -w packages/backend",
+    "db:migrate": "npm run db:migrate -w packages/backend",
+    "db:seed": "npm run db:seed -w packages/backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
