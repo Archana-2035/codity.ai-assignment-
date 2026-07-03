@@ -22,6 +22,7 @@ import { projectsRouter } from './auth/projects.routes';
 import { queuesRouter } from './queues/queues.routes';
 import { jobsRouter } from './jobs/jobs.routes';
 import { workersRouter } from './workers/workers.routes';
+import { workflowsRouter } from './workflows/workflows.routes';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 const PORT = parseInt(process.env.PORT || '3000');
@@ -90,7 +91,18 @@ async function bootstrap(): Promise<void> {
     message: { success: false, error: 'Too many requests, please try again later' },
     standardHeaders: true,
     legacyHeaders: false,
-    skip: (req) => req.path.startsWith('/api/v1/workers') || req.path.startsWith('/api/v1/health'),
+    skip: (req) => {
+      if (process.env.NODE_ENV !== 'production') return true;
+      const ip = req.ip || '';
+      return (
+        ip === '127.0.0.1' || 
+        ip === '::1' || 
+        ip.includes('127.0.0.1') || 
+        ip.includes('::1') || 
+        req.originalUrl.startsWith('/api/v1/workers') || 
+        req.originalUrl.startsWith('/api/v1/health')
+      );
+    }
   }));
 
   // Stricter rate limit on auth endpoints
@@ -98,6 +110,16 @@ async function bootstrap(): Promise<void> {
     windowMs: 15 * 60 * 1000,
     max: 20,
     message: { success: false, error: 'Too many auth attempts' },
+    skip: (req) => {
+      if (process.env.NODE_ENV !== 'production') return true;
+      const ip = req.ip || '';
+      return (
+        ip === '127.0.0.1' || 
+        ip === '::1' || 
+        ip.includes('127.0.0.1') || 
+        ip.includes('::1')
+      );
+    }
   }));
 
   // ─── Health Check ─────────────────────────────────────────
@@ -137,6 +159,7 @@ async function bootstrap(): Promise<void> {
   app.use('/api/v1', queuesRouter);
   app.use('/api/v1', jobsRouter);
   app.use('/api/v1', workersRouter);
+  app.use('/api/v1', workflowsRouter);
 
   // ─── Error Handlers ───────────────────────────────────────
   app.use(notFoundHandler);

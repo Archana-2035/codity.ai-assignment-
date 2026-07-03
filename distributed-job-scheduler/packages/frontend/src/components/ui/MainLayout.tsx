@@ -1,13 +1,25 @@
+import { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 
 export default function MainLayout() {
   const { user, activeProject, logout } = useAuthStore();
   const location = useLocation();
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Queues', path: '/queues' },
+    { name: 'Job Explorer', path: '/jobs' },
     { name: 'Workers', path: '/workers' },
   ];
 
@@ -52,9 +64,14 @@ export default function MainLayout() {
           <div style={{ fontSize: '0.875rem', marginBottom: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {user?.email}
           </div>
-          <button onClick={logout} className="btn btn-secondary" style={{ width: '100%' }}>
-            Logout
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button onClick={toggleTheme} className="btn btn-secondary" style={{ flex: 1, padding: '0.5rem 0' }}>
+              {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+            </button>
+            <button onClick={logout} className="btn btn-secondary" style={{ flex: 1, padding: '0.5rem 0' }}>
+              Logout
+            </button>
+          </div>
         </div>
       </aside>
 

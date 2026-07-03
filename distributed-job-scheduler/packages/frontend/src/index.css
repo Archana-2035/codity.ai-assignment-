@@ -1,19 +1,40 @@
 :root {
-  --bg-color: #0f172a;
-  --panel-bg: rgba(30, 41, 59, 0.7);
-  --panel-border: rgba(255, 255, 255, 0.1);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent-color: #3b82f6;
-  --accent-hover: #2563eb;
+  /* LIGHT MODE (Warm Peach & Plum) */
+  --bg-color: #f3d0a4; /* Light warm sand/peach */
+  --panel-bg: rgba(255, 255, 255, 0.55);
+  --panel-border: rgba(172, 111, 130, 0.4); /* Muted rose */
+  --text-primary: #660e60; /* Dark plum */
+  --text-secondary: #893f71; /* Berry */
+  --accent-color: #ac6f82; /* Muted rose */
+  --accent-hover: #893f71; /* Berry */
   
-  --status-pending: #fbbf24;
-  --status-running: #60a5fa;
-  --status-completed: #34d399;
-  --status-failed: #ef4444;
-  --status-dead: #7f1d1d;
+  --status-pending: #ac6f82;
+  --status-running: #893f71;
+  --status-completed: #660e60;
+  --status-failed: #cfa093;
+  --status-dead: #f3d0a4;
   
+  --sidebar-bg: rgba(207, 160, 147, 0.85); /* Dusty peach glass */
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="dark"] {
+  /* DARK MODE (Vampire/Sith) */
+  --bg-color: #000000;
+  --panel-bg: rgba(61, 1, 14, 0.85); /* #3d010e Very Dark Red */
+  --panel-border: rgba(182, 4, 42, 0.4); /* #b6042a Crimson */
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --accent-color: #f50538; /* Vibrant Red */
+  --accent-hover: #b6042a; /* Crimson */
+  
+  --status-pending: #b6042a;
+  --status-running: #f50538;
+  --status-completed: #b6042a;
+  --status-failed: #79021c; /* Dark Maroon */
+  --status-dead: #3d010e;
+  
+  --sidebar-bg: rgba(61, 1, 14, 0.95);
 }
 
 * {
@@ -46,7 +67,7 @@ body {
 
 .sidebar {
   width: 260px;
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--sidebar-bg);
   border-right: 1px solid var(--panel-border);
   display: flex;
   flex-direction: column;
@@ -60,7 +81,7 @@ body {
 
 .btn {
   background: var(--accent-color);
-  color: white;
+  color: var(--bg-color);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;

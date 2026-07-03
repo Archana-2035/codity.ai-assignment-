@@ -502,3 +502,49 @@ export async function getSystemStats(req: Request, res: Response): Promise<void>
     },
   } as ApiResponse);
 }
+
+export async function listProjectJobs(req: Request, res: Response): Promise<void> {
+  const { projectId } = req.params;
+  const {
+    page = 1, limit = 20, status, type, queueId,
+    sortBy = 'created_at', sortDir = 'desc'
+  } = req.query as any;
+  const offset = (Number(page) - 1) * Number(limit);
+
+  const validSortFields = ['created_at', 'run_at', 'priority', 'attempt_count', 'status'];
+  const safeSortBy = validSortFields.includes(sortBy) ? sortBy : 'created_at';
+  const safeSortDir = sortDir === 'asc' ? 'asc' : 'desc';
+
+  const baseQuery = db('jobs as j')
+    .join('queues as q', 'q.id', 'j.queue_id')
+    .where('j.project_id', projectId);
+
+  if (status) baseQuery.where('j.status', status);
+  if (type) baseQuery.where('j.type', type);
+  if (queueId) baseQuery.where('j.queue_id', queueId);
+
+  try {
+    const [jobs, [{ count }]] = await Promise.all([
+      baseQuery.clone()
+        .orderBy(`j.${safeSortBy}`, safeSortDir)
+        .limit(Number(limit))
+        .offset(offset)
+        .select('j.*', 'q.name as queue_name'),
+      baseQuery.clone().count('j.id as count'),
+    ]);
+
+    res.json({
+      success: true,
+      data: jobs,
+      meta: {
+        total: Number(count),
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(Number(count) / Number(limit))
+      },
+    } as ApiResponse);
+  } catch (err: any) {
+    logger.error('List project jobs error', { error: err.message });
+    res.status(500).json({ success: false, error: 'Failed to list project jobs' } as ApiResponse);
+  }
+}

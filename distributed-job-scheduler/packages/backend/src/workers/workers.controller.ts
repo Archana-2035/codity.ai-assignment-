@@ -315,9 +315,11 @@ export async function completeJob(req: Request, res: Response): Promise<void> {
       }
 
       // Check if batch needs update
-      const job = await trx('jobs').where({ id: jobId }).first();
       if (job?.batch_id) {
         await updateBatchCounters(trx, job.batch_id);
+      }
+      if (job?.workflow_id) {
+        await advanceWorkflow(trx, job);
       }
     });
 
@@ -419,6 +421,12 @@ export async function failJob(req: Request, res: Response): Promise<void> {
       if (job?.batch_id) {
         await updateBatchCounters(trx, job.batch_id);
       }
+      if ((nextStatus === 'dead' || nextStatus === 'failed') && job?.workflow_id) {
+        await trx('workflows').where({ id: job.workflow_id }).update({
+          status: 'failed',
+          updated_at: now
+        });
+      }
     });
 
     emitEvent(WsEvent.JOB_STATUS_CHANGED, { jobId, status: 'failed', workerId });
@@ -458,5 +466,91 @@ async function updateBatchCounters(trx: any, batchId: string): Promise<void> {
     pending_count: pending,
     status,
     completed_at: pending === 0 ? new Date() : null,
+    updated_at: new Date(),
   });
+}
+
+async function advanceWorkflow(trx: any, completedJob: any): Promise<void> {
+  const workflowId = completedJob.workflow_id;
+  const workflow = await trx('workflows').where({ id: workflowId }).first();
+  if (!workflow || workflow.status !== 'running') return;
+
+  const definition = typeof workflow.definition === 'string' ? JSON.parse(workflow.definition) : workflow.definition;
+  const steps = definition.steps as any[];
+
+  const allJobs = await trx('jobs').where({ workflow_id: workflowId });
+  const completedStepIds = new Set(
+    allJobs
+      .filter((j: any) => j.status === 'completed' && typeof j.payload === 'string')
+      .map((j: any) => {
+        try {
+          const payload = JSON.parse(j.payload);
+          return payload._workflow?.stepId;
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean)
+  );
+  
+  // also handle object payload if parsed automatically
+  allJobs.forEach((j: any) => {
+    if (j.status === 'completed' && typeof j.payload === 'object' && j.payload?._workflow?.stepId) {
+      completedStepIds.add(j.payload._workflow.stepId);
+    }
+  });
+
+  let allStepsCompleted = true;
+
+  for (const step of steps) {
+    if (completedStepIds.has(step.id)) continue;
+
+    const deps = step.dependsOn || [];
+    const depsMet = deps.every((depId: string) => completedStepIds.has(depId));
+
+    if (depsMet) {
+      let exists = false;
+      for (const j of allJobs) {
+        let stepId = null;
+        if (typeof j.payload === 'string') {
+          try { stepId = JSON.parse(j.payload)?._workflow?.stepId; } catch {}
+        } else if (typeof j.payload === 'object') {
+          stepId = j.payload?._workflow?.stepId;
+        }
+        if (stepId === step.id) {
+          exists = true;
+          break;
+        }
+      }
+      
+      if (!exists) {
+        await trx('jobs').insert({
+          id: uuidv4(),
+          queue_id: step.queueId,
+          project_id: workflow.project_id,
+          type: step.jobType,
+          payload: JSON.stringify({ ...step.payload, _workflow: { workflowId, stepId: step.id } }),
+          status: 'pending',
+          run_at: new Date(),
+          max_attempts: 3,
+          workflow_id: workflowId,
+          parent_job_id: completedJob.id,
+          created_by: completedJob.created_by,
+        });
+        allStepsCompleted = false;
+      } else {
+        allStepsCompleted = false;
+      }
+    } else {
+      allStepsCompleted = false;
+    }
+  }
+
+  if (allStepsCompleted) {
+    await trx('workflows').where({ id: workflowId }).update({
+      status: 'completed',
+      completed_at: new Date(),
+      updated_at: new Date()
+    });
+  }
 }

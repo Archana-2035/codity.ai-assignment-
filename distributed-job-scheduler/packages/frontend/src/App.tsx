@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import QueuesList from './pages/QueuesList';
 import QueueDetail from './pages/QueueDetail';
 import JobDetail from './pages/JobDetail';
+import JobExplorer from './pages/JobExplorer';
 import WorkersList from './pages/WorkersList';
 import DlqList from './pages/DlqList';
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="/queues" element={<QueuesList />} />
         <Route path="/queues/:queueId" element={<QueueDetail />} />
         <Route path="/queues/:queueId/dlq" element={<DlqList />} />
+        <Route path="/jobs" element={<JobExplorer />} />
         <Route path="/jobs/:jobId" element={<JobDetail />} />
         <Route path="/workers" element={<WorkersList />} />
         <Route path="*" element={<Navigate to="/" replace />} />

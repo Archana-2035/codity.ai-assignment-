@@ -43,14 +43,33 @@ export class WorkerProcess {
       queues: this.config.queueIds,
     });
 
-    // Register with backend
-    const workerInfo = await api.registerWorker({
-      hostname: os.hostname(),
-      pid: process.pid,
-      queueIds: this.config.queueIds,
-      concurrency: this.config.concurrency,
-      version: process.env.npm_package_version || '1.0.0',
-    });
+    // Register with backend (with retry logic)
+    let registered = false;
+    let attempts = 0;
+    const maxAttempts = 15;
+    let delay = 1000;
+    let workerInfo: any = null;
+
+    while (!registered && attempts < maxAttempts) {
+      try {
+        attempts++;
+        workerInfo = await api.registerWorker({
+          hostname: os.hostname(),
+          pid: process.pid,
+          queueIds: this.config.queueIds,
+          concurrency: this.config.concurrency,
+          version: process.env.npm_package_version || '1.0.0',
+        });
+        registered = true;
+      } catch (err: any) {
+        logger.warn(`Worker registration attempt ${attempts}/${maxAttempts} failed. Retrying in ${delay}ms...`, { error: err.message });
+        if (attempts >= maxAttempts) {
+          throw new Error(`Worker registration failed after ${maxAttempts} attempts: ${err.message}`);
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay = Math.min(delay * 1.5, 10000);
+      }
+    }
     this.workerId = workerInfo.id;
     logger.info('Worker registered', { workerId: this.workerId });
 

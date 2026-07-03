@@ -129,4 +129,18 @@ router.post('/queues/:queueId/dlq/retry-all', authenticate, jobsController.bulkR
 // ─── System Stats ─────────────────────────────────────────────
 router.get('/stats', authenticate, jobsController.getSystemStats);
 
+// ─── Project Jobs ─────────────────────────────────────────────
+router.get(
+  '/projects/:projectId/jobs',
+  authenticate,
+  [
+    query('status').optional().isIn(['pending', 'scheduled', 'claimed', 'running', 'completed', 'failed', 'dead', 'cancelled']),
+    query('queueId').optional().isUUID(),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: 100 }),
+  ],
+  validate,
+  jobsController.listProjectJobs
+);
+
 export { router as jobsRouter };

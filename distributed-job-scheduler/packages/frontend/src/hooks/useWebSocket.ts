@@ -9,7 +9,7 @@ export function useWebSocket() {
     const token = localStorage.getItem('accessToken');
     if (!token) return;
 
-    const s = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+    const s = io(import.meta.env.VITE_API_URL || '', {
       auth: { token },
       transports: ['websocket'],
     });
