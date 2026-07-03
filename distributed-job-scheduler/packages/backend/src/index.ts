@@ -90,6 +90,7 @@ async function bootstrap(): Promise<void> {
     message: { success: false, error: 'Too many requests, please try again later' },
     standardHeaders: true,
     legacyHeaders: false,
+    skip: (req) => req.path.startsWith('/api/v1/workers') || req.path.startsWith('/api/v1/health'),
   }));
 
   // Stricter rate limit on auth endpoints

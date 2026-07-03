@@ -12,6 +12,11 @@ export default function QueueDetail() {
   const [queue, setQueue] = useState<any>(null);
   const [jobs, setJobs] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any[]>([]);
+  const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
+  const [jobType, setJobType] = useState('send-email');
+  const [jobDelay, setJobDelay] = useState(0);
+  const [jobPriority, setJobPriority] = useState(5);
+  const [jobPayload, setJobPayload] = useState('{\n  "to": "user@example.com",\n  "subject": "Hello World"\n}');
   const socket = useWebSocket();
 
   const fetchData = async () => {
@@ -62,7 +67,6 @@ export default function QueueDetail() {
       socket.off(WsEvent.JOB_CREATED);
     };
   }, [socket, queueId]);
-
   const togglePause = async () => {
     try {
       if (queue.is_paused) {
@@ -78,9 +82,39 @@ export default function QueueDetail() {
     }
   };
 
-  if (!queue) return <div>Loading...</div>;
+  const handleTriggerJob = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      let parsedPayload = {};
+      try {
+        if (jobPayload.trim()) {
+          parsedPayload = JSON.parse(jobPayload);
+        }
+      } catch {
+        toast.error('Invalid JSON payload');
+        return;
+      }
 
-  return (
+      const body: any = {
+        type: jobType,
+        payload: parsedPayload,
+        priority: Number(jobPriority),
+      };
+
+      if (jobDelay > 0) {
+        body.runAt = new Date(Date.now() + jobDelay * 1000).toISOString();
+      }
+
+      await api.post(`/queues/${queueId}/jobs`, body);
+      toast.success('Job triggered successfully!');
+      setIsTriggerModalOpen(false);
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Failed to trigger job');
+    }
+  };
+
+  if (!queue) return <div>Loading...</div>;  return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
@@ -93,6 +127,9 @@ export default function QueueDetail() {
           </h1>
         </div>
         <div>
+          <button onClick={() => setIsTriggerModalOpen(true)} className="btn btn-primary" style={{ marginRight: '1rem' }}>
+            Trigger Job
+          </button>
           <Link to={`/queues/${queueId}/dlq`} className="btn btn-secondary" style={{ marginRight: '1rem', textDecoration: 'none' }}>
             View DLQ ({queue.stats.deadCount})
           </Link>
@@ -172,6 +209,90 @@ export default function QueueDetail() {
           </tbody>
         </table>
       </div>
+
+      {isTriggerModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div className="glass-panel" style={{
+            width: '100%',
+            maxWidth: '500px',
+            padding: '2rem',
+            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.3)',
+            border: '1px solid var(--panel-border)'
+          }}>
+            <h2 style={{ marginBottom: '1.5rem', color: '#fff' }}>Trigger Background Job</h2>
+            <form onSubmit={handleTriggerJob}>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Job Type</label>
+                <input
+                  type="text"
+                  value={jobType}
+                  onChange={(e) => setJobType(e.target.value)}
+                  className="glass-panel"
+                  style={{ width: '100%', padding: '0.75rem', color: '#fff', border: '1px solid var(--panel-border)', background: 'rgba(255,255,255,0.05)' }}
+                  required
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Delay (Seconds, 0 for immediate)</label>
+                <input
+                  type="number"
+                  value={jobDelay}
+                  onChange={(e) => setJobDelay(Number(e.target.value))}
+                  className="glass-panel"
+                  style={{ width: '100%', padding: '0.75rem', color: '#fff', border: '1px solid var(--panel-border)', background: 'rgba(255,255,255,0.05)' }}
+                  min="0"
+                />
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Priority (1 - 10)</label>
+                <select
+                  value={jobPriority}
+                  onChange={(e) => setJobPriority(Number(e.target.value))}
+                  className="glass-panel"
+                  style={{ width: '100%', padding: '0.75rem', color: '#fff', border: '1px solid var(--panel-border)', background: '#111827' }}
+                >
+                  {[...Array(10)].map((_, i) => (
+                    <option key={i + 1} value={i + 1} style={{ background: '#111827' }}>{i + 1} (Priority)</option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Payload (JSON)</label>
+                <textarea
+                  value={jobPayload}
+                  onChange={(e) => setJobPayload(e.target.value)}
+                  className="glass-panel"
+                  style={{ width: '100%', height: '100px', padding: '0.75rem', color: '#fff', border: '1px solid var(--panel-border)', background: 'rgba(255,255,255,0.05)', fontFamily: 'monospace' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <button type="button" onClick={() => setIsTriggerModalOpen(false)} className="btn btn-secondary">
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Trigger
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
