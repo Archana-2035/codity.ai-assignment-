@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { api, useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 import { getErrorMsg } from '../utils/errorHelper';
+import { useThemeStore } from '../store/themeStore';
 
 export default function Login() {
   const [email, setEmail] = useState('admin@djs.dev');
   const [password, setPassword] = useState('Admin@1234');
   const [loading, setLoading] = useState(false);
   const login = useAuthStore(state => state.login);
+  const { theme, toggleTheme } = useThemeStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +27,14 @@ export default function Login() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      
+      {/* Theme Toggle Top Right */}
+      <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 50 }}>
+        <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', borderRadius: '12px' }}>
+          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+        </button>
+      </div>
+
       {/* Background Elements */}
 
       {/* Login Card */}

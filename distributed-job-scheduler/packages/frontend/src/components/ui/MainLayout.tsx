@@ -1,8 +1,10 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { useThemeStore } from '../../store/themeStore';
 
 export default function MainLayout() {
   const { user, activeProject, logout } = useAuthStore();
+  const { theme, toggleTheme } = useThemeStore();
   const location = useLocation();
 
   const navItems = [
@@ -74,9 +76,14 @@ export default function MainLayout() {
              </div>
           </div>
           
-          <button onClick={logout} className="btn btn-secondary" style={{ width: '100%', padding: '0.75rem 0', borderRadius: '12px' }}>
-            Sign Out
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            <button onClick={toggleTheme} className="btn btn-secondary" style={{ flex: 1, padding: '0.75rem 0', borderRadius: '12px' }}>
+              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+            </button>
+            <button onClick={logout} className="btn btn-secondary" style={{ flex: 1, padding: '0.75rem 0', borderRadius: '12px' }}>
+              Sign Out
+            </button>
+          </div>
         </div>
       </aside>
 

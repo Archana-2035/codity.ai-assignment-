@@ -26,6 +26,32 @@
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+[data-theme="light"] {
+  /* LIGHT COLOR PALETTE THEME */
+  --bg-color: #FCF6DE; 
+  --panel-bg: #F7EBAA; 
+  --panel-border: rgba(32, 32, 32, 0.15);
+  --text-primary: #202020;
+  --text-secondary: rgba(32, 32, 32, 0.7);
+  --accent-color: #F7DA6B; /* Soft Yellow */
+  --accent-hover: #F1BD71; /* Peach/Orange */
+  --accent-text: #202020; /* Dark text */
+  --accent-glow: rgba(247, 218, 107, 0.3);
+  
+  --status-pending: #fbbf24;
+  --status-running: #0ea5e9;
+  --status-completed: #10b981;
+  --status-failed: #ef4444;
+  --status-dead: rgba(32, 32, 32, 0.5);
+  
+  --sidebar-bg: #F7EBAA;
+  
+  --nav-text: var(--text-secondary);
+  --nav-hover-bg: rgba(247, 218, 107, 0.2);
+  --nav-active-bg: var(--accent-color);
+  --nav-active-text: var(--accent-text);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
