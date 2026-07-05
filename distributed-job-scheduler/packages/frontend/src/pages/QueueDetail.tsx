@@ -6,6 +6,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { format } from 'date-fns';
 import { WsEvent } from '@djs/shared';
 import toast from 'react-hot-toast';
+import { getErrorMsg } from '../../utils/errorHelper';
 
 export default function QueueDetail() {
   const { queueId } = useParams();
@@ -80,7 +81,7 @@ export default function QueueDetail() {
       }
       fetchData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to toggle queue');
+      toast.error(getErrorMsg(err, 'Failed to toggle queue'));
     }
   };
 
@@ -112,7 +113,7 @@ export default function QueueDetail() {
       setIsTriggerModalOpen(false);
       fetchData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to trigger job');
+      toast.error(getErrorMsg(err, 'Failed to trigger job'));
     }
   };
 

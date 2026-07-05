@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { api, useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
+import { getErrorMsg } from '../utils/errorHelper';
 
 export default function Login() {
   const [email, setEmail] = useState('admin@djs.dev');
@@ -16,7 +17,7 @@ export default function Login() {
       login(res.data.data);
       toast.success('Login successful');
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Login failed');
+      toast.error(getErrorMsg(err, 'Login failed'));
     } finally {
       setLoading(false);
     }

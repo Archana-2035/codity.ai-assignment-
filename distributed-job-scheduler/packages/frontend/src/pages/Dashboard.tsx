@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api } from '../store/authStore';
+import { useAuthStore, api } from '../store/authStore';
+import toast from 'react-hot-toast';
+import { getErrorMsg } from '../utils/errorHelper';
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -9,6 +11,7 @@ export default function Dashboard() {
       const res = await api.get('/stats');
       setStats(res.data.data);
     } catch (err) {
+      toast.error(getErrorMsg(err, 'Failed to load stats'));
       console.error(err);
     }
   };
