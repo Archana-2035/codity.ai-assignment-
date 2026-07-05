@@ -16,6 +16,7 @@ import JobDetail from './pages/JobDetail';
 import JobExplorer from './pages/JobExplorer';
 import WorkersList from './pages/WorkersList';
 import DlqList from './pages/DlqList';
+import Analytics from './pages/Analytics';
 
 function App() {
   const { init, isAuthenticated, isLoading } = useAuthStore();
@@ -50,6 +51,7 @@ function App() {
         <Route path="/jobs" element={<JobExplorer />} />
         <Route path="/jobs/:jobId" element={<JobDetail />} />
         <Route path="/workers" element={<WorkersList />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

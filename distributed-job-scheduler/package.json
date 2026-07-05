@@ -18,6 +18,12 @@
     "start": "npm run db:migrate && concurrently \"npm start -w packages/backend\" \"npm start -w packages/worker\""
   },
   "devDependencies": {
+    "@railway/cli": "^5.23.3",
     "concurrently": "^9.1.0"
+  },
+  "dependencies": {
+    "marked": "^18.0.5",
+    "pdfkit": "^0.19.1",
+    "puppeteer": "^25.3.0"
   }
 }

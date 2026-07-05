@@ -1,40 +1,40 @@
 :root {
-  /* LIGHT MODE (Warm Peach & Plum) */
-  --bg-color: #f3d0a4; /* Light warm sand/peach */
-  --panel-bg: rgba(255, 255, 255, 0.55);
-  --panel-border: rgba(172, 111, 130, 0.4); /* Muted rose */
-  --text-primary: #660e60; /* Dark plum */
-  --text-secondary: #893f71; /* Berry */
-  --accent-color: #ac6f82; /* Muted rose */
-  --accent-hover: #893f71; /* Berry */
+  /* LIGHT MODE (Frost & Indigo) */
+  --bg-color: #f8fafc; /* Ghost White */
+  --panel-bg: rgba(255, 255, 255, 0.9);
+  --panel-border: rgba(15, 23, 42, 0.1);
+  --text-primary: #0f172a; /* Deep Navy */
+  --text-secondary: #475569;
+  --accent-color: #4f46e5; /* Indigo */
+  --accent-hover: #3730a3;
   
-  --status-pending: #ac6f82;
-  --status-running: #893f71;
-  --status-completed: #660e60;
-  --status-failed: #cfa093;
-  --status-dead: #f3d0a4;
+  --status-pending: #f59e0b; /* Amber */
+  --status-running: #3b82f6; /* Blue */
+  --status-completed: #10b981; /* Emerald */
+  --status-failed: #ef4444; /* Red */
+  --status-dead: #64748b; /* Slate */
   
-  --sidebar-bg: rgba(207, 160, 147, 0.85); /* Dusty peach glass */
+  --sidebar-bg: rgba(241, 245, 249, 0.95);
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 [data-theme="dark"] {
-  /* DARK MODE (Vampire/Sith) */
-  --bg-color: #000000;
-  --panel-bg: rgba(61, 1, 14, 0.85); /* #3d010e Very Dark Red */
-  --panel-border: rgba(182, 4, 42, 0.4); /* #b6042a Crimson */
-  --text-primary: #ffffff;
-  --text-secondary: #e0e0e0;
-  --accent-color: #f50538; /* Vibrant Red */
-  --accent-hover: #b6042a; /* Crimson */
+  /* DARK MODE (Midnight & Neon) */
+  --bg-color: #020617; /* Midnight Blue */
+  --panel-bg: rgba(15, 23, 42, 0.7); 
+  --panel-border: rgba(6, 182, 212, 0.3); /* Neon Cyan border */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-color: #06b6d4; /* Neon Cyan */
+  --accent-hover: #0891b2; 
   
-  --status-pending: #b6042a;
-  --status-running: #f50538;
-  --status-completed: #b6042a;
-  --status-failed: #79021c; /* Dark Maroon */
-  --status-dead: #3d010e;
+  --status-pending: #fbbf24;
+  --status-running: #38bdf8;
+  --status-completed: #34d399;
+  --status-failed: #f87171;
+  --status-dead: #475569;
   
-  --sidebar-bg: rgba(61, 1, 14, 0.95);
+  --sidebar-bg: rgba(2, 6, 23, 0.95);
 }
 
 * {

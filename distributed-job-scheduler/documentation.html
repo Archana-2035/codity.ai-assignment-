@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Distributed Job Scheduler Documentation</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; line-height: 1.6; }
+  h1 { border-bottom: 2px solid #eaecef; padding-bottom: 10px; color: #24292e; }
+  h2 { border-bottom: 1px solid #eaecef; padding-bottom: 8px; margin-top: 30px; color: #24292e; }
+  pre { background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace; }
+  code { background-color: rgba(27,31,35,0.05); border-radius: 3px; padding: 0.2em 0.4em; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 8px; }
+  .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; color: white; background: #0366d6; font-size: 12px; font-weight: bold; margin-right: 5px; }
+</style>
+</head>
+<body>
+
+<h1>🚀 Distributed Job Scheduler (Production-Grade)</h1>
+
+<p>
+  <span class="badge">version 1.0.0</span>
+  <span class="badge" style="background:#28a745">Node.js v20+</span>
+  <span class="badge" style="background:#6f42c1">PostgreSQL 15+</span>
+  <span class="badge" style="background:#cb2431">Redis 7+</span>
+</p>
+
+<p><strong>Live Demo:</strong> <a href="https://pink-bats-bow.loca.lt">https://pink-bats-bow.loca.lt</a></p>
+
+<p>A highly scalable, robust, and production-ready <strong>Distributed Job Scheduling Platform</strong>. Designed to handle massive workloads, this system allows organizations to enqueue, schedule, monitor, and execute millions of background tasks asynchronously with high reliability.</p>
+
+<h2>🎯 Core Features</h2>
+<ul>
+  <li><strong>Distributed Architecture:</strong> Independent Backend API and Worker nodes scaling horizontally.</li>
+  <li><strong>Atomic Job Claiming:</strong> Redis Distributed Locks (<code>SET NX PX</code>) ensure a job is NEVER processed twice.</li>
+  <li><strong>Dead Letter Queue (DLQ):</strong> Poison-pill jobs are securely moved to a DLQ after max retries.</li>
+  <li><strong>Cron & Delayed Execution:</strong> Schedule jobs for the future or on recurring cron expressions.</li>
+  <li><strong>Real-Time Monitoring:</strong> WebSockets (Socket.io) stream live job statuses to the dashboard.</li>
+  <li><strong>Beautiful UI:</strong> A stunning React/Vite dashboard with dynamically responding Light & Dark (Vampire/Sith) Modes.</li>
+</ul>
+
+<h2>⭐ Bonus Features Implemented</h2>
+<ul>
+  <li><strong>Workflow Dependencies (DAG):</strong> Jobs can trigger downstream dependent jobs upon completion.</li>
+  <li><strong>AI Failure Summaries:</strong> Integrates gracefully with LLMs to summarize <em>why</em> a job failed based on stack traces.</li>
+  <li><strong>Queue Sharding:</strong> Dynamic queue sharding logic in Redis for high-throughput partitioning.</li>
+  <li><strong>Rate Limiting:</strong> Redis Token-Bucket rate-limiting per individual queue.</li>
+  <li><strong>Role-Based Access Control (RBAC):</strong> Organization-level isolation and strict JWT Role enforcement.</li>
+  <li><strong>Configurable Retry Backoffs:</strong> Exponential backoff algorithms for network/transient failures.</li>
+  <li><strong>Global Distributed Locks:</strong> Prevents race conditions across hundreds of worker nodes.</li>
+  <li><strong>Event-driven Webhooks:</strong> Out-of-the-box support for triggering HTTP Webhooks.</li>
+</ul>
+
+<h2>🛠️ Tech Stack</h2>
+<ul>
+  <li><strong>Frontend:</strong> React 18, Vite 6, TypeScript, Zustand, CSS Variables</li>
+  <li><strong>Backend & Worker:</strong> Node.js, Express.js, PostgreSQL (Knex.js), Redis (ioredis), Socket.io, Winston</li>
+</ul>
+
+<h2>⚙️ How to Run Locally</h2>
+<pre><code># 1. Install Dependencies
+npm install
+
+# 2. Setup Environment Variables (.env)
+PORT=5000
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/djs
+REDIS_URL=redis://localhost:6379
+JWT_SECRET=super_secret
+
+# 3. Run Migrations & Start
+npm run start
+</code></pre>
+
+</body>
+</html>

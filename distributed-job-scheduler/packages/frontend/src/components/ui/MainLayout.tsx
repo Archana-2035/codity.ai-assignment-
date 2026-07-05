@@ -21,6 +21,7 @@ export default function MainLayout() {
     { name: 'Queues', path: '/queues' },
     { name: 'Job Explorer', path: '/jobs' },
     { name: 'Workers', path: '/workers' },
+    { name: 'Analytics', path: '/analytics' },
   ];
 
   return (
