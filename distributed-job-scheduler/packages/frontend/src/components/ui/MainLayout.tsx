@@ -15,43 +15,33 @@ export default function MainLayout() {
 
   return (
     <div className="layout">
-      {/* Background Elements */}
-      <div className="grid-bg"></div>
-      <div className="radial-glow-left"></div>
-      <div className="radial-glow-right"></div>
+      <div className="bg-layer"></div>
       
+      {/* Floating Pill Sidebar */}
       <aside className="sidebar">
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--panel-border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ padding: '2rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'center' }}>
           <div style={{
-            background: 'var(--accent-color)',
-            width: '32px',
-            height: '32px',
-            borderRadius: '6px',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 100%)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 8px var(--accent-glow)'
+            boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
           }}>
-            {/* SVG stacked diamonds for Codity logo */}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" />
-              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#ff57b9" />
+              <path d="M2 12L12 17L22 12" stroke="#ff57b9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="#ff57b9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <div>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', margin: 0, letterSpacing: '-0.025em' }}>
-              Codity
-            </h2>
-            {activeProject && (
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                {activeProject.name}
-              </div>
-            )}
-          </div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', margin: 0, letterSpacing: '-0.025em' }}>
+            Codity
+          </h2>
         </div>
         
-        <nav style={{ flex: 1, padding: '1.5rem 0' }}>
+        <nav style={{ flex: 1, padding: '2rem 0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
             return (
@@ -59,11 +49,7 @@ export default function MainLayout() {
                 key={item.path}
                 to={item.path}
                 className={`nav-item ${isActive ? 'active' : ''}`}
-                style={{
-                  padding: '0.875rem 1.5rem',
-                  textDecoration: 'none',
-                  display: 'block'
-                }}
+                style={{ textDecoration: 'none' }}
               >
                 {item.name}
               </Link>
@@ -71,18 +57,31 @@ export default function MainLayout() {
           })}
         </nav>
 
-        <div style={{ padding: '1.5rem', borderTop: '1px solid var(--panel-border)' }}>
-          <div style={{ fontSize: '0.875rem', marginBottom: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-secondary)' }}>
-            Logged in as <strong style={{ color: '#fff' }}>{user?.email}</strong>
+        <div style={{ padding: '2rem 1.5rem', background: 'rgba(0,0,0,0.2)' }}>
+          {activeProject && (
+            <div style={{ marginBottom: '1.5rem', background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '12px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Active Project</div>
+              <div style={{ color: '#fff', fontWeight: 600 }}>{activeProject.name}</div>
+            </div>
+          )}
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff' }}>
+                {user?.email?.[0].toUpperCase()}
+             </div>
+             <div style={{ flex: 1, overflow: 'hidden' }}>
+               <div style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.email}</div>
+             </div>
           </div>
-          <button onClick={logout} className="btn btn-secondary" style={{ width: '100%', padding: '0.6rem 0' }}>
+          
+          <button onClick={logout} className="btn btn-secondary" style={{ width: '100%', padding: '0.75rem 0', borderRadius: '12px' }}>
             Sign Out
           </button>
         </div>
       </aside>
 
-      <main className="main-content">
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <main className="main-content glass-panel" style={{ padding: '2rem', border: 'none', background: 'rgba(255,255,255,0.1)' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
           <Outlet />
         </div>
       </main>

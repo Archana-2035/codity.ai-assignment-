@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
+  baseURL: import.meta.env.VITE_API_URL || '', // Falls back to relative '/' for Vercel proxy
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
