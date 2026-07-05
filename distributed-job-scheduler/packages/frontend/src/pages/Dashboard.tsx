@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore, api } from '../store/authStore';
+import { api } from '../store/authStore';
 import toast from 'react-hot-toast';
 import { getErrorMsg } from '../utils/errorHelper';
 

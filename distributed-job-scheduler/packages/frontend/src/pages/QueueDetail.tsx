@@ -6,7 +6,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { format } from 'date-fns';
 import { WsEvent } from '@djs/shared';
 import toast from 'react-hot-toast';
-import { getErrorMsg } from '../../utils/errorHelper';
+import { getErrorMsg } from '../utils/errorHelper';
 
 export default function QueueDetail() {
   const { queueId } = useParams();
