@@ -19,7 +19,7 @@ A highly scalable, robust, and production-ready **Distributed Job Scheduling Pla
 - **Dead Letter Queue (DLQ):** Poison-pill jobs are securely moved to a DLQ after max retries.
 - **Cron & Delayed Execution:** Schedule jobs for the future or on recurring cron expressions.
 - **Real-Time Monitoring:** WebSockets (Socket.io) stream live job statuses to the dashboard.
-- **Beautiful UI:** A stunning React/Vite dashboard with dynamically responding **Light & Dark (Vampire/Sith) Modes**.
+- **Beautiful UI:** A stunning React/Vite dashboard with dynamically responding **High Contrast Dark & Spring Light Themes**.
 
 ## ⭐ Bonus Features Implemented
 
@@ -100,7 +100,7 @@ npm run start
 
 The dashboard includes full support for system metrics, job creation, dead letter queue management, and a beautiful custom-built dark mode.
 
-*The UI utilizes CSS custom properties to rapidly switch between a pastel light mode and a deep crimson dark mode, with fully transparent inputs and glassmorphism elements.*
+*The UI utilizes CSS custom properties to rapidly switch between a soft spring light mode (pale yellows and sage greens) and a high contrast dark mode (deep gray, vibrant yellow and blue), with fully transparent inputs and glassmorphism elements.*
 
 ---
 *Built for scale, reliability, and speed.*
