@@ -1,4 +1,4 @@
-const { chromium } = require('./packages/e2e/node_modules/playwright');
+const { chromium } = require('./packages/e2e/node_modules/playwright-core');
 const fs = require('fs');
 const marked = require('marked');
 
@@ -22,7 +22,9 @@ const marked = require('marked');
   </html>
   `;
   
-  const browser = await chromium.launch();
+  // Need executable path for playwright-core
+  const executablePath = 'C:/Users/archa/AppData/Local/ms-playwright/chromium-1228/chrome-win/chrome.exe';
+  const browser = await chromium.launch({ executablePath, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.setContent(content, { waitUntil: 'networkidle' });
   await page.pdf({ path: 'C:/Users/archa/.gemini/antigravity/brain/00af8422-4c60-47e5-ba6b-a831611912c6/submission_report.pdf', format: 'A4', printBackground: true });

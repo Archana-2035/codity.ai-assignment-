@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '', // Falls back to relative '/' for Vercel proxy
+  baseURL: '', // Force relative URL to always use Vercel proxy
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
@@ -22,7 +22,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const baseURL = import.meta.env.VITE_API_URL || '';
+        const baseURL = '';
         await axios.post(`${baseURL}/api/v1/auth/refresh`, {}, { withCredentials: true });
         
         return api(originalRequest);
