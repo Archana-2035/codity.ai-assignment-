@@ -51,6 +51,7 @@ async function bootstrap(): Promise<void> {
 
   // ─── Express App ──────────────────────────────────────────
   const app = express();
+  app.set('trust proxy', 1);
   const httpServer = http.createServer(app);
 
   // Security Headers
