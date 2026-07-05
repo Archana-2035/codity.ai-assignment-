@@ -105,9 +105,9 @@ export async function seed(knex: Knex): Promise<void> {
   });
 
   // Create queues
-  const emailQueueId = uuidv4();
-  const dataQueueId = uuidv4();
-  const highPriorityQueueId = uuidv4();
+  const emailQueueId = '11111111-1111-4111-a111-111111111111';
+  const dataQueueId = '22222222-2222-4222-a222-222222222222';
+  const highPriorityQueueId = '33333333-3333-4333-a333-333333333333';
   await knex('queues').insert([
     {
       id: emailQueueId,

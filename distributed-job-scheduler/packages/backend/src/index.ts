@@ -99,7 +99,6 @@ async function bootstrap(): Promise<void> {
         ip === '::1' || 
         ip.includes('127.0.0.1') || 
         ip.includes('::1') || 
-        req.originalUrl.startsWith('/api/v1/workers') || 
         req.originalUrl.startsWith('/api/v1/health')
       );
     }
@@ -110,6 +109,23 @@ async function bootstrap(): Promise<void> {
     windowMs: 15 * 60 * 1000,
     max: 20,
     message: { success: false, error: 'Too many auth attempts' },
+    skip: (req) => {
+      if (process.env.NODE_ENV !== 'production') return true;
+      const ip = req.ip || '';
+      return (
+        ip === '127.0.0.1' || 
+        ip === '::1' || 
+        ip.includes('127.0.0.1') || 
+        ip.includes('::1')
+      );
+    }
+  }));
+
+  // Dedicated high-capacity rate limit for workers
+  app.use('/api/v1/workers/', rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5000,
+    message: { success: false, error: 'Too many worker requests' },
     skip: (req) => {
       if (process.env.NODE_ENV !== 'production') return true;
       const ip = req.ip || '';

@@ -16,7 +16,7 @@ const config: Knex.Config = {
   },
   pool: {
     min: 2,
-    max: 20,
+    max: 10,
     acquireTimeoutMillis: 30000,
     createTimeoutMillis: 30000,
     idleTimeoutMillis: 30000,

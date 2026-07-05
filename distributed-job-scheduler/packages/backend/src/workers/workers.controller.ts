@@ -275,6 +275,9 @@ export async function completeJob(req: Request, res: Response): Promise<void> {
   try {
     await db.transaction(async (trx) => {
       const now = new Date();
+      
+      const job = await trx('jobs').where({ id: jobId }).first();
+      if (!job) throw new Error('Job not found');
 
       await trx('jobs').where({ id: jobId, worker_id: workerId }).update({
         status: 'completed',

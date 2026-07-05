@@ -35,13 +35,11 @@ const logger = winston.createLogger({
   ],
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new winston.transports.Console({
-      format: combine(colorize(), timestamp({ format: 'HH:mm:ss' }), devFormat),
-    })
-  );
-}
+logger.add(
+  new winston.transports.Console({
+    format: combine(colorize(), timestamp({ format: 'HH:mm:ss' }), devFormat),
+  })
+);
 
 export { logger };
 export default logger;

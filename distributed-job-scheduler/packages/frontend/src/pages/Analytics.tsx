@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { api } from '../store/authStore';
+import { api, useAuthStore } from '../store/authStore';
 
 export default function Analytics() {
+  const { activeProject } = useAuthStore();
   const [throughputData, setThroughputData] = useState<any[]>([]);
   const [statusData, setStatusData] = useState<any[]>([]);
 
@@ -10,7 +11,8 @@ export default function Analytics() {
     // Generate some impressive real-time looking data based on actual jobs
     const fetchMetrics = async () => {
       try {
-        const res = await api.get('/jobs?limit=500');
+        if (!activeProject) return;
+        const res = await api.get(`/projects/${activeProject.id}/jobs?limit=100`);
         const jobs = res.data.data.jobs || [];
         
         // Group by status for Pie Chart
@@ -54,7 +56,7 @@ export default function Analytics() {
     fetchMetrics();
     const interval = setInterval(fetchMetrics, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [activeProject]);
 
   const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#f59e0b', '#64748b'];
 

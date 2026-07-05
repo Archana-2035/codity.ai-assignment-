@@ -2,14 +2,15 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || '',
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (config.url && !config.url.startsWith('/api/v1')) {
+    const cleanUrl = config.url.startsWith('/') ? config.url.substring(1) : config.url;
+    config.url = `/api/v1/${cleanUrl}`;
   }
   return config;
 });
@@ -21,20 +22,11 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) throw new Error('No refresh token');
+        const baseURL = import.meta.env.VITE_API_URL || '';
+        await axios.post(`${baseURL}/api/v1/auth/refresh`, {}, { withCredentials: true });
         
-        const res = await axios.post('/api/v1/auth/refresh', { refreshToken });
-        const { accessToken, refreshToken: newRefresh } = res.data.data;
-        
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', newRefresh);
-        
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (err) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         window.location.href = '/login';
         return Promise.reject(err);
       }
@@ -62,9 +54,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   
   init: async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) throw new Error('No token');
-      
       const res = await api.get('/auth/me');
       const user = res.data.data;
       
@@ -79,24 +68,20 @@ export const useAuthStore = create<AuthState>((set) => ({
       
       set({ user, isAuthenticated: true, isLoading: false });
     } catch {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
       set({ user: null, isAuthenticated: false, isLoading: false, activeProject: null });
     }
   },
   
   login: (data) => {
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
     set({ user: data.user, isAuthenticated: true });
     // Reload to finish init (fetching projects)
     window.location.href = '/';
   },
   
-  logout: () => {
-    api.post('/auth/logout', { refreshToken: localStorage.getItem('refreshToken') }).catch(() => {});
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+  logout: async () => {
+    try {
+      await api.post('/auth/logout', {});
+    } catch {}
     set({ user: null, isAuthenticated: false, activeProject: null });
   },
 

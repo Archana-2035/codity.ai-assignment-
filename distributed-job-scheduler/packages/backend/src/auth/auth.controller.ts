@@ -99,11 +99,18 @@ export async function register(req: Request, res: Response): Promise<void> {
 
     logger.info('User registered', { userId, email });
 
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' as const,
+    };
+
+    res.cookie('accessToken', accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
+    res.cookie('refreshToken', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+
     res.status(201).json({
       success: true,
       data: {
-        accessToken,
-        refreshToken,
         user: {
           id: user.id,
           email: user.email,
@@ -147,11 +154,18 @@ export async function login(req: Request, res: Response): Promise<void> {
 
     logger.info('User logged in', { userId: user.id, email });
 
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' as const,
+    };
+
+    res.cookie('accessToken', accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
+    res.cookie('refreshToken', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+
     res.json({
       success: true,
       data: {
-        accessToken,
-        refreshToken,
         user: { id: user.id, email: user.email, role: user.role },
       },
     } as ApiResponse);
@@ -163,7 +177,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 export async function refreshTokens(req: Request, res: Response): Promise<void> {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
     if (!refreshToken) {
       res.status(401).json({ success: false, error: 'Refresh token required' } as ApiResponse);
@@ -202,9 +216,18 @@ export async function refreshTokens(req: Request, res: Response): Promise<void> 
       expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' as const,
+    };
+
+    res.cookie('accessToken', newAccessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
+    res.cookie('refreshToken', newRefreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
+
     res.json({
       success: true,
-      data: { accessToken: newAccessToken, refreshToken: newRefreshToken },
+      data: {},
     } as ApiResponse);
   } catch (err) {
     logger.error('Token refresh error', { error: (err as Error).message });
@@ -214,10 +237,19 @@ export async function refreshTokens(req: Request, res: Response): Promise<void> 
 
 export async function logout(req: Request, res: Response): Promise<void> {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
     if (refreshToken) {
       await db('refresh_tokens').where({ token: refreshToken }).update({ is_revoked: true });
     }
+    
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' as const,
+    };
+    res.clearCookie('accessToken', cookieOptions);
+    res.clearCookie('refreshToken', cookieOptions);
+    
     res.json({ success: true, message: 'Logged out successfully' } as ApiResponse);
   } catch (err) {
     res.status(500).json({ success: false, error: 'Logout failed' } as ApiResponse);
@@ -283,12 +315,16 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
     return;
   }
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ success: false, error: 'Authorization header required' } as ApiResponse);
+  let token = req.cookies.accessToken;
+  if (!token && authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  }
+
+  if (!token) {
+    res.status(401).json({ success: false, error: 'Authentication token required' } as ApiResponse);
     return;
   }
 
-  const token = authHeader.split(' ')[1];
   try {
     const payload = verifyAccessToken(token);
     (req as AuthenticatedRequest).user = payload;

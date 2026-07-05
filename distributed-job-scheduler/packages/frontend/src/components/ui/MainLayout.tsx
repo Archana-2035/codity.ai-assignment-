@@ -45,14 +45,11 @@ export default function MainLayout() {
               <Link
                 key={item.path}
                 to={item.path}
+                className={`nav-item ${isActive ? 'active' : ''}`}
                 style={{
-                  display: 'block',
-                  padding: '0.75rem 1.5rem',
-                  color: isActive ? 'white' : 'var(--text-secondary)',
-                  background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',
-                  borderLeft: `3px solid ${isActive ? 'var(--accent-color)' : 'transparent'}`,
+                  padding: '1rem 1.5rem',
                   textDecoration: 'none',
-                  fontWeight: 500
+                  display: 'block'
                 }}
               >
                 {item.name}

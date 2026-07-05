@@ -79,7 +79,7 @@ export default function JobExplorer() {
               padding: '0.5rem',
               borderRadius: '6px',
               border: '1px solid var(--panel-border)',
-              background: 'rgba(30, 41, 59, 0.9)',
+              background: 'var(--panel-bg)',
               color: 'var(--text-primary)',
               cursor: 'pointer',
               outline: 'none'
@@ -101,7 +101,7 @@ export default function JobExplorer() {
               padding: '0.5rem',
               borderRadius: '6px',
               border: '1px solid var(--panel-border)',
-              background: 'rgba(30, 41, 59, 0.9)',
+              background: 'var(--panel-bg)',
               color: 'var(--text-primary)',
               cursor: 'pointer',
               outline: 'none'

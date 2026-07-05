@@ -7,7 +7,8 @@
     "packages/shared",
     "packages/backend",
     "packages/worker",
-    "packages/frontend"
+    "packages/frontend",
+    "packages/e2e"
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev -w packages/backend\" \"npm run dev -w packages/worker\" \"npm run dev -w packages/frontend\"",
@@ -15,7 +16,9 @@
     "test": "npm run test -w packages/backend",
     "db:migrate": "npm run db:migrate -w packages/backend",
     "db:seed": "npm run db:seed -w packages/backend",
-    "start": "npm run db:migrate && concurrently \"npm start -w packages/backend\" \"npm start -w packages/worker\""
+    "start": "node start.js",
+    "start:backend": "npm run db:migrate && npm run db:seed && concurrently \"npm start -w packages/backend\" \"npm start -w packages/worker\"",
+    "start:frontend": "npx serve -s packages/frontend/dist"
   },
   "devDependencies": {
     "@railway/cli": "^5.23.3",
@@ -23,6 +26,7 @@
   },
   "dependencies": {
     "marked": "^18.0.5",
+    "md-to-pdf": "^5.2.5",
     "pdfkit": "^0.19.1",
     "puppeteer": "^25.3.0"
   }

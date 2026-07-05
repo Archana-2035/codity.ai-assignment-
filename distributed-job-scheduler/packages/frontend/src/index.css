@@ -15,6 +15,12 @@
   --status-dead: #64748b; /* Slate */
   
   --sidebar-bg: rgba(241, 245, 249, 0.95);
+  
+  --nav-text: var(--text-secondary);
+  --nav-hover-bg: rgba(15, 23, 42, 0.05);
+  --nav-active-bg: rgba(79, 70, 229, 0.1);
+  --nav-active-text: var(--accent-color);
+  
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -35,6 +41,11 @@
   --status-dead: #475569;
   
   --sidebar-bg: rgba(2, 6, 23, 0.95);
+  
+  --nav-text: var(--text-secondary);
+  --nav-hover-bg: rgba(255, 255, 255, 0.05);
+  --nav-active-bg: rgba(6, 182, 212, 0.15);
+  --nav-active-text: var(--accent-color);
 }
 
 * {
@@ -71,6 +82,26 @@ body {
   border-right: 1px solid var(--panel-border);
   display: flex;
   flex-direction: column;
+}
+
+.nav-item {
+  padding: 0.75rem 1.5rem;
+  color: var(--nav-text);
+  background: transparent;
+  border-left: 3px solid transparent;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background: var(--nav-hover-bg);
+}
+
+.nav-item.active {
+  color: var(--nav-active-text);
+  background: var(--nav-active-bg);
+  border-left: 3px solid var(--accent-color);
+  font-weight: 600;
 }
 
 .main-content {
@@ -136,7 +167,7 @@ th {
 .badge-running { background: rgba(96, 165, 250, 0.2); color: var(--status-running); }
 .badge-completed { background: rgba(52, 211, 153, 0.2); color: var(--status-completed); }
 .badge-failed { background: rgba(239, 68, 68, 0.2); color: var(--status-failed); }
-.badge-dead { background: rgba(127, 29, 29, 0.4); color: #fca5a5; }
+.badge-dead { background: rgba(100, 116, 139, 0.2); color: var(--status-dead); }
 
 .text-danger { color: var(--status-failed) !important; }
 .text-success { color: var(--status-completed) !important; }
@@ -156,4 +187,24 @@ th {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: var(--bg-color);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  min-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
