@@ -6,7 +6,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue.svg)
 ![Redis](https://img.shields.io/badge/Redis-7+-red.svg)
 
-> **Live Demo:** [https://pink-bats-bow.loca.lt](https://pink-bats-bow.loca.lt)
+> **Live Demo:** [https://codity-ai-assignment.vercel.app](https://codity-ai-assignment.vercel.app)
 
 A highly scalable, robust, and production-ready **Distributed Job Scheduling Platform**. Designed to handle massive workloads, this system allows organizations to enqueue, schedule, monitor, and execute millions of background tasks asynchronously with high reliability.
 
