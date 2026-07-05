@@ -4,7 +4,6 @@ import { useAuthStore } from './store/authStore';
 
 // Layouts
 import MainLayout from './components/ui/MainLayout';
-import AuthLayout from './components/ui/AuthLayout';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -32,11 +31,9 @@ function App() {
   if (!isAuthenticated) {
     return (
       <Routes>
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
   }
