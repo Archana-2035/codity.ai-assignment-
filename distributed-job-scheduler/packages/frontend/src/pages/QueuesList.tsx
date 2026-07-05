@@ -93,7 +93,7 @@ export default function QueuesList() {
             {queues.map(q => (
               <tr key={q.id}>
                 <td style={{ fontWeight: 500 }}>
-                  <Link to={`/queues/${q.id}`} style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
+                  <Link to={`/queues/${q.id}`} style={{ color: 'var(--link-color)', textDecoration: 'none' }}>
                     {q.name}
                   </Link>
                 </td>

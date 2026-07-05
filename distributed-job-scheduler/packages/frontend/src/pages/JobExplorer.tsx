@@ -138,7 +138,7 @@ export default function JobExplorer() {
               <tr key={j.id}>
                 <td style={{ fontFamily: 'monospace', fontSize: '0.875rem' }}>{j.id.split('-')[0]}...</td>
                 <td style={{ fontWeight: 500 }}>
-                  <Link to={`/queues/${j.queue_id}`} style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>
+                  <Link to={`/queues/${j.queue_id}`} style={{ color: 'var(--link-color)', textDecoration: 'none' }}>
                     {j.queue_name || 'unknown'}
                   </Link>
                 </td>

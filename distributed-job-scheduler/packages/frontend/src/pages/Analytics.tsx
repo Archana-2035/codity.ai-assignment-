@@ -74,8 +74,8 @@ export default function Analytics() {
               <AreaChart data={throughputData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorJobs" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--accent-color)" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="var(--accent-color)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--chart-color)" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="var(--chart-color)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="time" stroke="var(--text-secondary)" fontSize={12} />
@@ -85,7 +85,7 @@ export default function Analytics() {
                   contentStyle={{ backgroundColor: 'var(--panel-bg)', borderColor: 'var(--panel-border)', borderRadius: '8px' }}
                   itemStyle={{ color: 'var(--text-primary)' }}
                 />
-                <Area type="monotone" dataKey="jobs" stroke="var(--accent-color)" fillOpacity={1} fill="url(#colorJobs)" />
+                <Area type="monotone" dataKey="jobs" stroke="var(--chart-color)" fillOpacity={1} fill="url(#colorJobs)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

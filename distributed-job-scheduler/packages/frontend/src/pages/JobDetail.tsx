@@ -36,7 +36,7 @@ export default function JobDetail() {
 
       <div className="grid-cards" style={{ gridTemplateColumns: '1fr 1fr' }}>
         <div className="glass-panel">
-          <h3 style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>Overview</h3>
+          <h3 style={{ marginBottom: '1rem', color: 'var(--link-color)' }}>Overview</h3>
           <div style={{ display: 'grid', gap: '1rem' }}>
             <div><span style={{ color: 'var(--text-secondary)' }}>Type:</span> {jobData.type}</div>
             <div><span style={{ color: 'var(--text-secondary)' }}>Run At:</span> {new Date(jobData.run_at).toLocaleString()}</div>
@@ -53,7 +53,7 @@ export default function JobDetail() {
         </div>
 
         <div className="glass-panel">
-          <h3 style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>Payload</h3>
+          <h3 style={{ marginBottom: '1rem', color: 'var(--link-color)' }}>Payload</h3>
           <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', overflowX: 'auto', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
             {JSON.stringify(jobData.payload, null, 2)}
           </pre>
@@ -61,7 +61,7 @@ export default function JobDetail() {
       </div>
 
       <div className="glass-panel" style={{ marginTop: '2rem' }}>
-        <h3 style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>Execution Logs</h3>
+        <h3 style={{ marginBottom: '1rem', color: 'var(--link-color)' }}>Execution Logs</h3>
         {jobData.logs?.length > 0 ? (
           <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', maxHeight: '400px', overflowY: 'auto' }}>
             {jobData.logs.map((log: any) => (

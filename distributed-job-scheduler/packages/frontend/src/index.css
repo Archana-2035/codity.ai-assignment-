@@ -10,6 +10,9 @@
   --accent-text: #202020; /* Dark text on Yellow */
   --accent-glow: rgba(255, 238, 50, 0.3);
   
+  --link-color: var(--accent-color);
+  --chart-color: #38bdf8; /* Blue chart for dark mode */
+  
   --status-pending: #fbbf24;
   --status-running: #38bdf8;
   --status-completed: #34d399;
@@ -37,6 +40,9 @@
   --accent-hover: #F1BD71; /* Peach/Orange */
   --accent-text: #202020; /* Dark text */
   --accent-glow: rgba(247, 218, 107, 0.3);
+  
+  --link-color: #72804A; /* Darker sage green for links/headings */
+  --chart-color: #ABB180; /* Sage green for chart area */
   
   --status-pending: #fbbf24;
   --status-running: #0ea5e9;
