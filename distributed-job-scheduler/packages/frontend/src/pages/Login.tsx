@@ -26,7 +26,6 @@ export default function Login() {
   return (
     <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
       {/* Background Elements */}
-      <div className="bg-layer"></div>
 
       {/* Login Card */}
       <div className="glass-panel" style={{ width: '100%', maxWidth: '450px', padding: '3.5rem 3rem', zIndex: 10, borderRadius: '24px' }}>
@@ -34,25 +33,25 @@ export default function Login() {
         {/* Brand Header */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginBottom: '3rem' }}>
           <div style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 100%)',
+            background: 'var(--panel-bg)',
             width: '64px',
             height: '64px',
             borderRadius: '20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(31,38,135,0.3)'
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
           }}>
             {/* SVG stacked diamonds for Codity logo */}
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#ff57b9" />
-              <path d="M2 12L12 17L22 12" stroke="#ff57b9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2 17L12 22L22 17" stroke="#ff57b9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="var(--accent-color)" />
+              <path d="M2 12L12 17L22 12" stroke="var(--accent-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="var(--accent-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 0.5rem 0', letterSpacing: '-0.025em', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Codity</h1>
-            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1rem', fontWeight: 500 }}>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 0.5rem 0', letterSpacing: '-0.025em', color: 'var(--text-primary)' }}>Codity</h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>
               Sign in to manage your distributed workloads
             </p>
           </div>

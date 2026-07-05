@@ -19,9 +19,9 @@ export default function MainLayout() {
       
       {/* Floating Pill Sidebar */}
       <aside className="sidebar">
-        <div style={{ padding: '2rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'center' }}>
+        <div style={{ padding: '2rem 1.5rem', borderBottom: '1px solid var(--panel-border)', display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'center' }}>
           <div style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 100%)',
+            background: 'var(--panel-bg)',
             width: '40px',
             height: '40px',
             borderRadius: '12px',
@@ -31,12 +31,12 @@ export default function MainLayout() {
             boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
           }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#ff57b9" />
-              <path d="M2 12L12 17L22 12" stroke="#ff57b9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2 17L12 22L22 17" stroke="#ff57b9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="var(--accent-color)" />
+              <path d="M2 12L12 17L22 12" stroke="var(--accent-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="var(--accent-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', margin: 0, letterSpacing: '-0.025em' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.025em' }}>
             Codity
           </h2>
         </div>
@@ -57,20 +57,20 @@ export default function MainLayout() {
           })}
         </nav>
 
-        <div style={{ padding: '2rem 1.5rem', background: 'rgba(0,0,0,0.2)' }}>
+        <div style={{ padding: '2rem 1.5rem', background: 'var(--bg-color)' }}>
           {activeProject && (
-            <div style={{ marginBottom: '1.5rem', background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '12px' }}>
-              <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Active Project</div>
-              <div style={{ color: '#fff', fontWeight: 600 }}>{activeProject.name}</div>
+            <div style={{ marginBottom: '1.5rem', background: 'var(--panel-bg)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--panel-border)' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Active Project</div>
+              <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{activeProject.name}</div>
             </div>
           )}
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff' }}>
+             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--accent-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'var(--accent-text)' }}>
                 {user?.email?.[0].toUpperCase()}
              </div>
              <div style={{ flex: 1, overflow: 'hidden' }}>
-               <div style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.email}</div>
+               <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.email}</div>
              </div>
           </div>
           
@@ -80,7 +80,7 @@ export default function MainLayout() {
         </div>
       </aside>
 
-      <main className="main-content glass-panel" style={{ padding: '2rem', border: 'none', background: 'rgba(255,255,255,0.1)' }}>
+      <main className="main-content glass-panel" style={{ padding: '2rem', border: 'none', background: 'var(--panel-bg)' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
           <Outlet />
         </div>
